@@ -1,12 +1,12 @@
 package com.iagoscandido.demoresttemplate.controller.mapper;
 
-import com.iagoscandido.demoresttemplate.dto.ViaCepDTO;
+import com.iagoscandido.demoresttemplate.dto.GetAddressViaCepDTO;
 import com.iagoscandido.demoresttemplate.model.Address;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AddressMapper {
-    public Address toAddress (ViaCepDTO.Response viaCepDTOResponse){
+    public Address toAddress (GetAddressViaCepDTO.Response viaCepDTOResponse){
         if (viaCepDTOResponse == null)
             return null;
 
@@ -22,7 +22,9 @@ public class AddressMapper {
         address.setGia(viaCepDTOResponse.getGia());
         address.setDdd(viaCepDTOResponse.getDdd());
         address.setSiafi(viaCepDTOResponse.getSiafi());
-
+        address.setId(200);
         return address;
     }
+
+
 }

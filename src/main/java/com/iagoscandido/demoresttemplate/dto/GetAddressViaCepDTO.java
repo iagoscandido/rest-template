@@ -6,7 +6,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ViaCepDTO {
+public class GetAddressViaCepDTO {
     @ToString
     @Getter
     @Setter

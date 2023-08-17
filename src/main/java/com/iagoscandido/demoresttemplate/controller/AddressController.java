@@ -1,25 +1,50 @@
 package com.iagoscandido.demoresttemplate.controller;
 
-import com.iagoscandido.demoresttemplate.dto.ViaCepDTO;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+import com.iagoscandido.demoresttemplate.dto.CreateAddressDTO;
+import com.iagoscandido.demoresttemplate.dto.GetAddressViaCepDTO;
+import com.iagoscandido.demoresttemplate.model.Address;
+import com.iagoscandido.demoresttemplate.repository.AddressRepository;
+import com.iagoscandido.demoresttemplate.service.CreateAddressService;
+import com.iagoscandido.demoresttemplate.service.GetAddressViaCepService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/address")
+@RequiredArgsConstructor
 public class AddressController {
+    private final GetAddressViaCepService getAddressViaCepService;
+    private final CreateAddressService createAddressService;
+    private final AddressRepository repository;
 
     @GetMapping("/{cep}")
-    public ViaCepDTO.Response getAddress (@PathVariable String cep){
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<ViaCepDTO.Response> responseEntity =
-                restTemplate
-                        .getForEntity
-                        (String.format("https://viacep.com.br/ws/%s/json/", cep), ViaCepDTO.Response.class);
-        return responseEntity.getBody();
+    @ResponseStatus(HttpStatus.OK)
+    public GetAddressViaCepDTO.Response getCep(@PathVariable String cep) {
+        return getAddressViaCepService.execute(cep);
     }
 
+    @GetMapping("/all")
+    public List<Address> getAll() {
+        return repository.findAll();
+    }
+
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public CreateAddressDTO.Response createAddress(
+            @Valid @RequestBody CreateAddressDTO.Request requestBody
+    ) {
+        String cep =  requestBody.getCep();
+
+        Address address = createAddressService.execute(cep);
+
+        return new CreateAddressDTO.Response(address.getId().toString());
+    }
 }
+
+
