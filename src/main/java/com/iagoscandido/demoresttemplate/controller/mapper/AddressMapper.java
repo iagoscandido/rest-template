@@ -22,7 +22,6 @@ public class AddressMapper {
         address.setGia(viaCepDTOResponse.getGia());
         address.setDdd(viaCepDTOResponse.getDdd());
         address.setSiafi(viaCepDTOResponse.getSiafi());
-        address.setId(200);
         return address;
     }
 
